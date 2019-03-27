@@ -1,0 +1,27 @@
+---
+- name: mkdir /usr/local/java
+  file:
+    path: /usr/local/java
+    state: directory
+
+- name: install jdk1.8
+  unarchive:
+    src: jdk-8u191-linux-x64.tar.gz
+    dest: /usr/local/java
+    owner: root
+    group: root
+
+- name: symbolink to /usr/local/java/jdk
+  file:
+    state: link
+    src: /usr/local/java/jdk1.8.0_191
+    dest: /usr/local/java/jdk
+
+- name: export java home to /etc/skel/.bash_profile
+  blockinfile:
+    path: /etc/skel/.bash_profile
+    backup: yes
+    block: |
+      #JDK
+      export JAVA_HOME=/usr/local/java/jdk
+      export PATH=$JAVA_HOME/bin:$PATH
